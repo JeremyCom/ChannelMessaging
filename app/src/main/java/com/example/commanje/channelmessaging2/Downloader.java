@@ -2,6 +2,9 @@ package com.example.commanje.channelmessaging2;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,46 +13,47 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.ResponseCache;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-/**
- *
- * Created by coso on 20/01/2017.
- */
-public class Downloader extends AsyncTask<Void, Void, String> {
-    private String requestURL;
-    private HashMap<String, String> postDataParams;
-    private Context contexte;
+public class Downloader extends AsyncTask<String, String, String> {
 
-    public Downloader(String requestURL, HashMap<String, String> postDataParams, Context contexte) {
-        this.requestURL = requestURL;
-        this.postDataParams = postDataParams;
-        this.contexte = contexte;
+    Context myContext;
+    ArrayList<OnDownloadCompleteListener> listeners = new ArrayList<>();
+    HashMap<String,String> params;
+    String url;
+
+    public Downloader(Context myContext, String url, HashMap<String, String> params) {
+        this.myContext = myContext;
+        this.url = url;
+        this.params = params;
     }
 
-    private ResponseCache reponse;
+    public Downloader(){}
 
-    @Override
-    protected String doInBackground(Void... params) {
-        return performPostCall(requestURL, postDataParams);
+    public void setDownloaderList(OnDownloadCompleteListener listener) {
+        this.listeners.add(listener);
     }
 
     @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-
+    protected String doInBackground(String... input) {
+        String retour = "";
+        return retour;
     }
 
     public String performPostCall(String requestURL, HashMap<String, String> postDataParams) {
+
         URL url;
         String response = "";
-        try {
+
+        try
+        {
+
             url = new URL(requestURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000);
@@ -63,34 +67,65 @@ public class Downloader extends AsyncTask<Void, Void, String> {
             writer.flush();
             writer.close();
             os.close();
-            int responseCode=conn.getResponseCode();
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
+            int responseCode = conn.getResponseCode();
+
+            if(responseCode == HttpsURLConnection.HTTP_OK) {
+
                 String line;
-                BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
                 while ((line=br.readLine()) != null) {
+
                     response+=line;
+
                 }
+
             }
-            else {
-                response="";
+            else{
+
+                response ="";
+
             }
         } catch (Exception e) {
+
             e.printStackTrace();
+
         }
+
         return response;
+
     }
 
-    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
+    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException
+    {
         StringBuilder result = new StringBuilder();
         boolean first = true;
+
         for (Map.Entry<String, String> entry : params.entrySet()){
-            if (first) first = false;
-            else result.append("&");
+
+            if(first)
+                first = false;
+            else
+                result.append("&");
+
             result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
             result.append("=");
             result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+
         }
+
         return result.toString();
+
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+
+        for (OnDownloadCompleteListener oneListener : listeners)
+        {
+            oneListener.onDownloadCompleted(result);
+        }
+
     }
 
 }
