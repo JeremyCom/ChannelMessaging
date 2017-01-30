@@ -42,7 +42,7 @@ public class Downloader extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... input) {
-        String retour = "";
+        String retour = performPostCall(url, params);
         return retour;
     }
 
