@@ -18,15 +18,13 @@ public class ChannelListActivity extends Activity implements AdapterView.OnItemC
     private String accesstoken;
     private Channels chs;
 
-    public static final String PREFS_NAME = "Stockage";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channel_list);
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = getSharedPreferences(AppConfig.PREFS_NAME, 0);
         accesstoken = settings.getString("accesstoken", "");
 
         HashMap<String, String> Params = new HashMap<String, String>();
@@ -43,7 +41,7 @@ public class ChannelListActivity extends Activity implements AdapterView.OnItemC
 
         Channel myChannel = chs.channels.get(position);
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = getSharedPreferences(AppConfig.PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("channelID", String.valueOf(myChannel.channelID));
         editor.commit();

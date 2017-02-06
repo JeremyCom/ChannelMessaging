@@ -68,13 +68,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onDownloadCompleted(String result) {
         Gson gson = new Gson();
         Result r = gson.fromJson(result, Result.class);
-        final String PREFS_NAME = "MyPrefsFile";
 
         if(r.code == 200){
 
             Toast.makeText(this, "Vous êtes connecté !" ,Toast.LENGTH_SHORT).show();
 
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences settings = getSharedPreferences(AppConfig.PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString("accesstoken", r.accesstoken);
             editor.commit();
