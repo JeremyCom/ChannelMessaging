@@ -48,6 +48,7 @@ public class ChannelMessage extends Activity implements OnDownloadCompleteListen
         Gson gson = new Gson();
         messages = gson.fromJson(result, Messages.class);
 
+        lVMessage = (ListView) findViewById(R.id.lVMessage);
         lVMessage.setAdapter(new MessageAdapter(getApplicationContext(), messages.messages));
         lVMessage.setOnItemClickListener(this);
 
