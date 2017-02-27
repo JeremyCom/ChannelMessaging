@@ -27,11 +27,20 @@ public class Downloader extends AsyncTask<String, String, String> {
     ArrayList<OnDownloadCompleteListener> listeners = new ArrayList<>();
     HashMap<String,String> params;
     String url;
+    int type;
+
+    public Downloader(Context myContext, String url, HashMap<String, String> params, int type) {
+        this.myContext = myContext;
+        this.url = url;
+        this.params = params;
+        this.type = type;
+    }
 
     public Downloader(Context myContext, String url, HashMap<String, String> params) {
         this.myContext = myContext;
         this.url = url;
         this.params = params;
+        this.type = 0;
     }
 
     public Downloader(){}
@@ -42,7 +51,8 @@ public class Downloader extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... input) {
-        String retour = performPostCall(url, params);
+        String retour = "";
+        retour = performPostCall(url, params);
         return retour;
     }
 
@@ -123,7 +133,7 @@ public class Downloader extends AsyncTask<String, String, String> {
 
         for (OnDownloadCompleteListener oneListener : listeners)
         {
-            oneListener.onDownloadCompleted(result);
+            oneListener.onDownloadCompleted(result, type);
         }
 
     }
