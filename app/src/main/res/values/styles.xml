@@ -5,7 +5,16 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/yellow</item>
+    </style>
+    <style name="TextLabel" parent="TextAppearance.AppCompat">
+        <!-- Hint color et label color si pas de focus -->
+        <item name="android:textColorHint">@color/red</item>
+        <item name="android:textSize">20sp</item>
+        <!-- bar color -->
+        <item name="colorControlNormal">@color/red</item>
+        <!-- Label color si focus -->
+        <item name="colorControlActivated">@color/teal</item>
     </style>
 
 </resources>
