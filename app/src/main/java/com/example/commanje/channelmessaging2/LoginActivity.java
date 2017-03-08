@@ -1,5 +1,6 @@
 package com.example.commanje.channelmessaging2;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button btnValider;
     private EditText txtId;
     private EditText txtPwd;
+    private View myview;
 
     public static final String PREFS_NAME = "Stockage";
 
@@ -31,6 +33,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnValider.setOnClickListener((View.OnClickListener) this) ;
         txtId = (EditText) findViewById(R.id.editTextID);
         txtPwd = (EditText) findViewById(R.id.editTextMDP);
+        myview = (View) findViewById(R.id.vue);
 
     }
 
@@ -64,8 +67,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             save("accesstoken", r.accesstoken);
 
-            Intent newActivity = new Intent(getApplicationContext(),ChannelListActivity.class);
-            startActivity(newActivity);
+            Intent loginIntent = new Intent(LoginActivity.this, ChannelListActivity.class);
+            startActivity(loginIntent, ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this, myview, "logo").toBundle());
 
         }
         else{
